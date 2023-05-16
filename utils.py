@@ -9,7 +9,7 @@ def first(iterable, default=None):
     "Returns first element of `iterable` that is not None"
     return next(filter(None, iterable), default)
 
-def save_model(model, model_name, models_folder="models", metadata=None):
+def save_model(model, model_name, models_folder="models", metadata=None, link=False):
     """Save the model to wandb as an artifact
     Args:
         model (nn.Module): Model to save.
@@ -28,6 +28,8 @@ def save_model(model, model_name, models_folder="models", metadata=None):
                         metadata=metadata)
     at.add_file(file_name)
     wandb.log_artifact(at)
+    if link:
+        wandb.run.link_artifact(at, 'capecape/FMNIST Classifier')
 
 def load_model(model_artifact_name, eval=True):
     """Load the model from wandb artifacts

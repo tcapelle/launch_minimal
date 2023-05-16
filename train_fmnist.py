@@ -25,6 +25,7 @@ defaults = SimpleNamespace(
     num_classes=10,
     in_chans=1,
     device = "cuda:0" if torch.cuda.is_available() else "cpu",
+    link_model=False,
 )
 
 def train(config):
@@ -104,7 +105,8 @@ def train(config):
         print(f"{epoch} - Train Loss: {train_loss:.3f}, Train Accuracy: {train_accuracy:.2f}")
 
     # Save trained model to disk and to W&B Artifacts
-    save_model(model, model_name=config.model_name, metadata=dict(config))
+    save_model(model, model_name=config.model_name, 
+               metadata=dict(config), link=config.link_model)
     run.finish()
 
 def parse_args(default_cfg):
@@ -119,6 +121,7 @@ def parse_args(default_cfg):
     parser.add_argument("--num_classes", type=int, default=defaults.num_classes)
     parser.add_argument("--in_chans", type=int, default=defaults.in_chans)
     parser.add_argument("--device", type=str, default=defaults.device)
+    parser.add_argument("--link_model", action="store_true", default=defaults.link_model)
     args = vars(parser.parse_args())
 
     # update config with parsed args
