@@ -1,0 +1,5 @@
+# W&B
+artifacts/
+FashionMNIST/
+models/
+wandb/
