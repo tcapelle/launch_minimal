@@ -64,19 +64,24 @@ def validate_model(model, valid_dl, config=defaults):
 
     return val_loss / len(valid_dl.dataset), correct / len(valid_dl.dataset)
 
-if __name__ == "__main__":
+def eval(config):
     # Initialize W&B run
-    run = wandb.init(project=PROJECT, entity=ENTITY, tags=["eval"], job_type="eval")
+    run = wandb.init(project=PROJECT, entity=ENTITY, tags=["eval"], job_type="eval", config=config)
+
+    config = wandb.config
 
     # Get the validation dataloader
-    valid_dl = get_valid_dl(defaults)
+    valid_dl = get_valid_dl(config)
 
     # Load the model
-    model = load_model(defaults.model_artifact)
+    model = load_model(config.model_artifact)
 
     # Log the validation loss and accuracy
-    val_loss, val_acc = validate_model(model, valid_dl, defaults)
+    val_loss, val_acc = validate_model(model, valid_dl, config)
     wandb.summary["val_loss"] = val_loss
     wandb.summary["val_acc"] = val_acc
 
     run.finish()
+
+if __name__ == "__main__":
+    eval(defaults)
