@@ -43,7 +43,7 @@ def train(config):
 
     model = timm.create_model(
         config.model_name, 
-        pretrained=True, 
+        pretrained=False, 
         num_classes=config.num_classes, 
         in_chans=config.in_chans)
 
