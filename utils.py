@@ -20,6 +20,7 @@ def save_model(model, model_name, models_folder="models", metadata=None):
     model_name = f"{wandb.run.id}_{model_name}"
     file_name = Path(f"{models_folder}/{model_name}.pth")
     file_name.parent.mkdir(parents=True, exist_ok=True)
+    model = model.to("cpu")
     torch.save(model.state_dict(), file_name)
     at = wandb.Artifact(model_name, 
                         type="model", 
