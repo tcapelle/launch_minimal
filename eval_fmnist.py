@@ -6,6 +6,7 @@ from torch.utils.data import DataLoader
 from torchvision.datasets import FashionMNIST
 import torchvision.transforms as T
 import wandb
+from tqdm.auto import tqdm
 
 from utils import load_model
 
@@ -16,7 +17,7 @@ defaults = SimpleNamespace(
     bs=128,
     num_workers=0,
     device = "cuda:0" if torch.cuda.is_available() else "cpu",
-    model_artifact = 'capecape/fashion-launch/k3d0lhu2_resnest14d:v0',
+    model_artifact = "capecape/fashion-launch/uvef8vsn_resnest14d:v0",
     log_images = False,
 )
 
@@ -37,7 +38,7 @@ def validate_model(model, valid_dl, config=defaults):
     val_loss = 0.
     with torch.inference_mode():
         correct = 0
-        for i, (images, labels) in enumerate(valid_dl):
+        for i, (images, labels) in tqdm(enumerate(valid_dl), total=len(valid_dl)):
             images, labels = images.to(config.device), labels.to(config.device)
 
             # Forward pass ➡
@@ -50,7 +51,7 @@ def validate_model(model, valid_dl, config=defaults):
 
             # Log validation predictions and images to the dashboard
             if config.log_images:
-                if i ==0:
+                if i == 0:
                     # 🐝 Create a wandb Table to log images, labels and predictions to
                     table = wandb.Table(columns=["image", "label", "pred"]+[f"score_{i}" for i in range(10)])
                 
