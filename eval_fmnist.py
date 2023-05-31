@@ -17,7 +17,7 @@ defaults = SimpleNamespace(
     bs=128,
     num_workers=0,
     device = "cuda:0" if torch.cuda.is_available() else "cpu",
-    model_artifact = "capecape/fashion-launch/uvef8vsn_resnest14d:v0",
+    model_artifact = "capecape/model-registry/FMNIST_Classifier:v1",
     log_images = False,
 )
 
